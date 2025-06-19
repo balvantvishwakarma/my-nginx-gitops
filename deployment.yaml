@@ -35,5 +35,5 @@ spec:
     - protocol: TCP
       port: 80       # यह सर्विस का पोर्ट है (क्लस्टर के अंदर)
       targetPort: 80 # यह पॉड का पोर्ट है जिस पर Nginx चल रहा है
-      nodePort: 30080 # <-- एक NodePort चुनें (30000-32767 के बीच)
+      nodePort: 8888 # <-- एक NodePort चुनें (30000-32767 के बीच)
   type: NodePort # Service का प्रकार NodePort होना चाहिए ताकि इसे बाहर से एक्सेस किया जा सके
