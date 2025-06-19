@@ -1,9 +1,13 @@
+# Existing Nginx Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment
+  namespace: my-custom-namespace # <-- सुनिश्चित करें कि यह नेमस्पेस यहाँ है
+  labels:
+    app: nginx
 spec:
-  replicas: 2 # हम 2 पॉड चलाना चाहते हैं
+  replicas: 2
   selector:
     matchLabels:
       app: nginx
@@ -17,3 +21,19 @@ spec:
         image: nginx:1.25.3
         ports:
         - containerPort: 80
+---
+# NEW Nginx Service for external access
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+  namespace: my-custom-namespace # <-- सुनिश्चित करें कि यह नेमस्पेस यहाँ है
+spec:
+  selector:
+    app: nginx # यह सेलेक्टर 'app: nginx' लेबल वाले पॉड्स को टारगेट करेगा
+  ports:
+    - protocol: TCP
+      port: 80       # यह सर्विस का पोर्ट है (क्लस्टर के अंदर)
+      targetPort: 80 # यह पॉड का पोर्ट है जिस पर Nginx चल रहा है
+      nodePort: 30080 # <-- एक NodePort चुनें (30000-32767 के बीच)
+  type: NodePort # Service का प्रकार NodePort होना चाहिए ताकि इसे बाहर से एक्सेस किया जा सके
